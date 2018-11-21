@@ -17,6 +17,17 @@ function list() {
 
     var _person = [];
 
+    this.sort = function (_person) {
+        _person.sort(function (a, b) {
+            if (a.subname == b.subname) {
+                return (a.name > b.name);
+            } else {
+                return (a.subname > b.subname);
+            }
+        });
+        return _person;
+    }
+
     this.isEmpty = function () {
         var empty = false;
         if (_person.length === 0) {
@@ -44,18 +55,20 @@ function list() {
             throw new isFullException();
         }
         _person.push(person);
+        _person.sort(function (a, b) {
+            if (a.subname < b.subname) {
+                return -1;
+            } else if (a.subname > b.subname) {
+                return 1;
+            } else if (a.subname == b.subname) {
+                if (a.name < b.name) {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            }
+        })
         return this.size();
-    }
-
-    this.addAt = function (person, index) {
-        if (this.isFull()) {
-            throw new isFullException();
-        }
-        if (index < 0 || index > SIZE) {
-            throw new indexLimitException();
-        }
-        _person.splice(index, 0, person);
-        return _person.length;
     }
 
     this.get = function (index) {
@@ -64,6 +77,7 @@ function list() {
         }
         var person = _person[index].name + " " + _person[index].subname;
         return person;
+
     }
 
     this.toString = function () {
@@ -76,11 +90,6 @@ function list() {
 
     this.indexOf = function (person) {
         var elem = _person.indexOf(person);
-        return elem;
-    }
-
-    this.lastIndexOf = function (person) {
-        var elem = _person.lastIndexOf(person);
         return elem;
     }
 
@@ -124,14 +133,6 @@ function list() {
             return false;
         }
     }
-
-    this.set = function (person, index) {
-        if (index < 0 || index > SIZE) {
-            throw new indexLimitException();
-        }
-        var elem = _person[index];
-        _person.splice(index, 1, person);
-        return elem.name + " " + elem.subname;
-    }
 }
+list.prototype = {};
 list.prototype.constructor = list;
